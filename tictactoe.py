@@ -1,29 +1,19 @@
-import pygame
-import sys
+import tkinter
 
-pygame.init()
+def draw_grid():
+    for i in range(3):
+        for j in range(3):
+            button = tkinter.Button(root)
+            button.grid(row=j, column=i)
 
-longueur = 600
-largeur = 600
-screen = pygame.display.set_mode((longueur,largeur))
-pygame.display.set_caption("morpion by antho")
+# cree fenetre
+root = tkinter.Tk()
 
-green = (70,176,119)
-red = (134,56,65)
-lineSize = 15
-background = screen.fill(red)
+# personnalisation fenetre
+root.title("TicTacToe")
+root.minsize(500,500)
 
-def Grid():
-    for x in range(1,4):
-        pygame.draw.line(screen,green,(0,x*205), (longueur,x*205), lineSize)
-        pygame.draw.line(screen,green,(x*205,0),(x*205,largeur), lineSize)
+draw_grid()
 
-run = True
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+root.mainloop()
 
-    screen.fill(red)
-    Grid()
-    pygame.display.update()
