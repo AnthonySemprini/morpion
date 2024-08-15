@@ -1,99 +1,84 @@
 import tkinter
-def print_winner():
+from tkinter import messagebox
+
+def print_winner(winning_buttons):
     global win
 
     if win is False:
         win = True
-        print("Le joueur", current_player, "a gagné le jeu")
+        for btn in winning_buttons:
+            btn.config(bg="lightgreen")
+        messagebox.showinfo("Félicitations!", f"Le joueur {current_player} a gagné le jeu!")
+        reset_game()
 
 def switch_player():
     global current_player
-    if current_player == 'X':
-        current_player = '0'
-    else:
-        current_player = 'X'
+    current_player = '0' if current_player == 'X' else 'X'
 
 def check_win(clicked_row, clicked_col):
+    winning_buttons = []
 
-    # detecter victoire horizontale
-    count = 0
-    for i in range(3):
-        current_button = buttons[i][clicked_row]
-        if current_button['text'] == current_player:
-            count += 1
-    if count == 3:
-        print_winner()
+    # Victoire horizontale
+    if all(buttons[clicked_row][i]['text'] == current_player for i in range(3)):
+        winning_buttons = [buttons[clicked_row][i] for i in range(3)]
+        print_winner(winning_buttons)
 
-    # victoire verticale
-    count = 0
-    for i in range(3):
-        current_button = buttons[clicked_col][i]
-        if current_button['text'] == current_player:
-            count += 1
-    if count == 3:
-        print_winner()
+    # Victoire verticale
+    elif all(buttons[i][clicked_col]['text'] == current_player for i in range(3)):
+        winning_buttons = [buttons[i][clicked_col] for i in range(3)]
+        print_winner(winning_buttons)
 
-    # victoire diagonale
-    count = 0
-    for i in range(3):
-        current_button = buttons[i][i]
-        if current_button['text'] == current_player:
-            count += 1
-    if count == 3:
-        print_winner()
+    # Victoire diagonale
+    elif all(buttons[i][i]['text'] == current_player for i in range(3)):
+        winning_buttons = [buttons[i][i] for i in range(3)]
+        print_winner(winning_buttons)
 
-    # victoire diagonale inversee
-    count = 0
-    for i in range(3):
-        current_button = buttons[2-i][i]
-        if current_button['text'] == current_player:
-            count += 1
-    if count == 3:
-        print_winner()
+    # Victoire diagonale inversée
+    elif all(buttons[i][2-i]['text'] == current_player for i in range(3)):
+        winning_buttons = [buttons[i][2-i] for i in range(3)]
+        print_winner(winning_buttons)
 
-    if win is False:
-        count = 0
-        for col in range(3):
-            for row in range(3):
-                current_button = buttons[col][row]
-                if current_button['text'] == 'X' or current_button['text'] == '0':
-                    count += 1
-        if count == 9:
-            print("Match nul!!!")
+    # Match nul
+    elif not win and all(buttons[row][col]['text'] != "" for row in range(3) for col in range(3)):
+        messagebox.showinfo("Match nul", "Match nul!")
+        reset_game()
 
-# cree symboles
 def place_symbol(row, column):
-
-    clicked_button = buttons[column][row]
-    if clicked_button['text'] == "":
-        clicked_button.config(text=current_player)
-
+    if not win and buttons[row][column]['text'] == "":
+        buttons[row][column].config(text=current_player)
         check_win(row, column)
-        switch_player()
+        if not win:
+            switch_player()
 
-# cree les cases
 def draw_grid():
-    for column in range(3):
-        buttons_in_cols = []
-        for row in range(3):
+    for row in range(3):
+        buttons_in_row = []
+        for col in range(3):
             button = tkinter.Button(
-                root, font=("Arial", 50),
-                width=5, height=3,
-                command=lambda r=row, c=column: place_symbol(r, c)
+                root, font=("Arial", 50), width=5, height=3,
+                command=lambda r=row, c=col: place_symbol(r, c)
             )
-            button.grid(row=row, column=column)
-            buttons_in_cols.append(button)
-        buttons.append(buttons_in_cols)
+            button.grid(row=row, column=col)
+            buttons_in_row.append(button)
+        buttons.append(buttons_in_row)
 
-# stockages
+def reset_game():
+    global win, current_player
+    win = False
+    current_player = 'X'
+    for row in range(3):
+        for col in range(3):
+            buttons[row][col].config(text="", bg="SystemButtonFace")
+
+# Stockages
 buttons = []
 current_player = 'X'
 win = False
 
-# creer la fenetre 
+# Créer la fenêtre 
 root = tkinter.Tk()
 
-# personnalisation de la fenetre
+# Personnalisation de la fenêtre
 root.title("TicTacToe")
 root.minsize(500, 500)
 
