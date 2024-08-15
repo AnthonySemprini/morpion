@@ -51,11 +51,15 @@ def place_symbol(row, column):
             switch_player()
 
 def draw_grid():
+    global grid_frame
+    grid_frame = tkinter.Frame(root)
+    grid_frame.pack(expand=True)
+    
     for row in range(3):
         buttons_in_row = []
         for col in range(3):
             button = tkinter.Button(
-                root, font=("Arial", 50), width=5, height=3,
+                grid_frame, font=("Arial", 50), width=5, height=3,
                 command=lambda r=row, c=col: place_symbol(r, c)
             )
             button.grid(row=row, column=col)
@@ -66,9 +70,22 @@ def reset_game():
     global win, current_player
     win = False
     current_player = 'X'
+    
     for row in range(3):
         for col in range(3):
             buttons[row][col].config(text="", bg="SystemButtonFace")
+    
+    show_home_screen()
+
+def start_game():
+    home_frame.pack_forget()
+    grid_frame.pack(expand=True)
+    root.update_idletasks()  # Force la mise à jour de l'interface
+
+def show_home_screen():
+    grid_frame.pack_forget()
+    home_frame.pack(expand=True)
+    root.update_idletasks()  # Force la mise à jour de l'interface
 
 # Stockages
 buttons = []
@@ -82,5 +99,17 @@ root = tkinter.Tk()
 root.title("TicTacToe")
 root.minsize(500, 500)
 
+# Créer la page d'accueil
+home_frame = tkinter.Frame(root)
+welcome_label = tkinter.Label(home_frame, text="Bienvenue au Tic-Tac-Toe!", font=("Arial", 24))
+start_button = tkinter.Button(home_frame, text="Commencer le jeu", font=("Arial", 18), command=start_game)
+welcome_label.pack(pady=20)
+start_button.pack()
+
+# Créer la grille mais ne pas l'afficher
 draw_grid()
+
+# Afficher la page d'accueil
+show_home_screen()
+
 root.mainloop()
