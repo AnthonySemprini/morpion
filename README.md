@@ -28,4 +28,11 @@ Le principal objectif de ce projet est de créer un jeu de morpion interactif et
 
 - **Langage**: Python
 - **Bibliothèque GUI**: Tkinter
+  
+### 🤝 Contribution
 
+Toute contribution est la bienvenue ! Si vous souhaitez contribuer, n'hésitez pas à soumettre une pull request.
+
+### 📫 Contact
+
+Pour toute question ou support, veuillez contacter [semprini.anthony@gmail.com].
