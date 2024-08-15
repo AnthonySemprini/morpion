@@ -7,7 +7,7 @@ def print_winner(winning_buttons):
     if win is False:
         win = True
         for btn in winning_buttons:
-            btn.config(bg="lightgreen")
+            btn.config(bg="#90EE90")
         messagebox.showinfo("Félicitations!", f"Le joueur {current_player} a gagné le jeu!")
         reset_game()
 
@@ -45,22 +45,22 @@ def check_win(clicked_row, clicked_col):
 
 def place_symbol(row, column):
     if not win and buttons[row][column]['text'] == "":
-        buttons[row][column].config(text=current_player)
+        buttons[row][column].config(text=current_player, fg="#4169E1" if current_player == 'X' else "#FF6347")
         check_win(row, column)
         if not win:
             switch_player()
 
 def draw_grid():
     global grid_frame
-    grid_frame = tkinter.Frame(root)
+    grid_frame = tkinter.Frame(root, bg="#F5F5F5")
     grid_frame.pack(expand=True)
     
     for row in range(3):
         buttons_in_row = []
         for col in range(3):
             button = tkinter.Button(
-                grid_frame, font=("Arial", 50), width=5, height=3,
-                command=lambda r=row, c=col: place_symbol(r, c)
+                grid_frame, font=("Arial", 50, "bold"), width=5, height=3, bg="#FFFACD", 
+                activebackground="#F0E68C", command=lambda r=row, c=col: place_symbol(r, c)
             )
             button.grid(row=row, column=col)
             buttons_in_row.append(button)
@@ -73,7 +73,7 @@ def reset_game():
     
     for row in range(3):
         for col in range(3):
-            buttons[row][col].config(text="", bg="SystemButtonFace")
+            buttons[row][col].config(text="", bg="#FFFACD", fg="black")
     
     show_home_screen()
 
@@ -98,13 +98,14 @@ root = tkinter.Tk()
 # Personnalisation de la fenêtre
 root.title("TicTacToe")
 root.minsize(500, 500)
+root.configure(bg="#4682B4")
 
 # Créer la page d'accueil
-home_frame = tkinter.Frame(root)
-welcome_label = tkinter.Label(home_frame, text="Bienvenue au Tic-Tac-Toe!", font=("Arial", 24))
-start_button = tkinter.Button(home_frame, text="Commencer le jeu", font=("Arial", 18), command=start_game)
+home_frame = tkinter.Frame(root, bg="#4682B4")
+welcome_label = tkinter.Label(home_frame, text="Bienvenue au Tic-Tac-Toe!", font=("Arial", 24, "bold"), bg="#4682B4", fg="white")
+start_button = tkinter.Button(home_frame, text="Commencer le jeu", font=("Arial", 18, "bold"), bg="#4682B4", fg="white", activebackground="#228B22", activeforeground="white", command=start_game)
 welcome_label.pack(pady=20)
-start_button.pack()
+start_button.pack(pady=20)
 
 # Créer la grille mais ne pas l'afficher
 draw_grid()
